@@ -13,6 +13,8 @@ class UsersController < ApplicationController
     # => name, email, pass/confirmation
    @user = User.new(user_params) 
    if @user.save
+      flash[:success] = "Welcome to the Sample App!"
+      redirect_to @user
       #Success (valid params)
     else
       # failure(not valid params)
