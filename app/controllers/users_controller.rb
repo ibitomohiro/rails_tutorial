@@ -11,7 +11,8 @@ class UsersController < ApplicationController
     # (@user + given params).save
     # User.create(params[:user])
     # => name, email, pass/confirmation
-    if @user = User.new(user_params) 
+   @user = User.new(user_params) 
+   if @user.save
       #Success (valid params)
     else
       # failure(not valid params)
@@ -21,6 +22,7 @@ class UsersController < ApplicationController
 
   private
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password,
+                                   :password_confirmation)
   end
 end
