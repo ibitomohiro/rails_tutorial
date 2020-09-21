@@ -21,6 +21,10 @@ class UsersController < ApplicationController
       render 'new' #もう一回newに戻る
     end
   end
+  # GET /users/(:id)/edit
+  def edit
+    @user = User.find(params[:id])
+  end
 
   private
   def user_params
