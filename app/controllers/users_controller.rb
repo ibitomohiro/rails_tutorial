@@ -1,7 +1,14 @@
 class UsersController < ApplicationController
- def show
-  @user = User.find(params[:id])
- end
+  before_action :logged_in_user, only: [:edit, :update, :update]
+  before_action :correct_user,   only: [:edit, :update]
+    # Get /users
+  def index 
+    @users = User.paginate(page:params[:page])
+  end
+
+  def show
+    @user = User.find(params[:id])
+  end
  
   def new
     @user = User.new
@@ -21,14 +28,38 @@ class UsersController < ApplicationController
       render 'new' #もう一回newに戻る
     end
   end
-  # GET /users/(:id)/edit
+  # GET /users/(:id)/edit  paramsを記入忘れない
   def edit
     @user = User.find(params[:id])
+  end
+
+  def update 
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      flash[:success] = "Profile updated"
+      redirect_to user_path
+    else
+      render 'edit'
+    end
   end
 
   private
   def user_params
     params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation)
+  end
+
+  # ログイン済みユーザーかどうか確認
+  def logged_in_user
+    unless logged_in?
+      flash[:danger] = "Please log in."
+      redirect_to login_url
+    end
+  end
+
+  # 正しいユーザーかどうか確認
+  def correct_user
+    @user = User.find(params[:id])
+    redirect_to(root_url) unless @user == current_user
   end
 end
