@@ -1,6 +1,8 @@
 class PagesController < ApplicationController
   # app/views/pages/home.html.erb
   def home
+    
+    @micropost = current_user.microposts.build if logged_in?
   end
 
   def help
